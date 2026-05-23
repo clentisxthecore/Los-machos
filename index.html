@@ -1,0 +1,1200 @@
+bash
+cat > /mnt/user-data/outputs/el-macho-barbearia.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Macho Barbearia — Belém, PA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#080808;
+  --paper:#f0ede6;
+  --gold:#c9a84c;
+  --gold-light:#e8d5a0;
+  --gold-dim:rgba(201,168,76,0.15);
+  --white:#ffffff;
+  --fog:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.08);
+  --border-gold:rgba(201,168,76,0.3);
+}
+html{scroll-behavior:smooth;cursor:none}
+body{
+  background:var(--ink);
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+
+/* CUSTOM CURSOR */
+#cursor{
+  width:10px;height:10px;
+  background:var(--gold);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width 0.2s,height 0.2s,background 0.2s;
+  mix-blend-mode:difference;
+}
+#cursor-ring{
+  width:36px;height:36px;
+  border:1px solid rgba(201,168,76,0.5);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:transform 0.12s ease-out,width 0.3s,height 0.3s,border-color 0.3s;
+}
+body:has(a:hover) #cursor{width:20px;height:20px}
+body:has(a:hover) #cursor-ring{width:60px;height:60px;border-color:var(--gold)}
+
+/* NOISE OVERLAY */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.025;pointer-events:none;z-index:1000;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.4rem 3rem;
+  transition:background 0.4s,backdrop-filter 0.4s,padding 0.4s;
+}
+nav.scrolled{
+  background:rgba(8,8,8,0.95);
+  backdrop-filter:blur(20px);
+  padding:1rem 3rem;
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.5rem;
+  letter-spacing:0.3em;
+  color:var(--white);
+  text-decoration:none;
+}
+.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
+.nav-links a{
+  color:rgba(255,255,255,0.5);
+  text-decoration:none;
+  font-size:0.75rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  transition:color 0.2s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';
+  position:absolute;bottom:-4px;left:0;right:0;height:1px;
+  background:var(--gold);
+  transform:scaleX(0);
+  transition:transform 0.3s;
+  transform-origin:left;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-book{
+  background:transparent;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:0.6rem 1.6rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.72rem;
+  font-weight:500;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:background 0.3s,color 0.3s;
+  cursor:none;
+}
+.nav-book:hover{background:var(--gold);color:var(--ink)}
+
+/* ===================== HERO ===================== */
+.hero{
+  position:relative;
+  height:100vh;
+  min-height:700px;
+  display:flex;align-items:center;
+  overflow:hidden;
+}
+.hero-bg-img{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to right, rgba(8,8,8,0.95) 45%, rgba(8,8,8,0.3) 100%),
+    url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1800&q=90') right center/cover no-repeat;
+}
+/* Gold glow orbs */
+.orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(100px);
+  pointer-events:none;
+}
+.orb-1{
+  width:600px;height:600px;
+  background:radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+  top:-100px;left:-150px;
+  animation:orb-drift 8s ease-in-out infinite alternate;
+}
+.orb-2{
+  width:400px;height:400px;
+  background:radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  bottom:100px;right:200px;
+  animation:orb-drift 12s ease-in-out infinite alternate-reverse;
+}
+@keyframes orb-drift{
+  0%{transform:translate(0,0)}
+  100%{transform:translate(40px,60px)}
+}
+
+/* Animated grid lines */
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size:80px 80px;
+  mask-image:linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, transparent 100%);
+}
+
+.hero-content{
+  position:relative;z-index:2;
+  padding:0 3rem;
+  max-width:700px;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:0.8rem;
+  font-size:0.68rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:1.8rem;
+  opacity:0;
+  animation:fade-up 0.8s ease forwards 0.3s;
+}
+.hero-eyebrow::before{content:'';width:2rem;height:1px;background:var(--gold)}
+.hero-eyebrow::after{content:'';width:2rem;height:1px;background:var(--gold)}
+
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(5rem,10vw,9.5rem);
+  line-height:0.9;
+  letter-spacing:0.02em;
+  margin-bottom:1rem;
+  opacity:0;
+  animation:fade-up 0.9s ease forwards 0.5s;
+}
+.hero h1 .italic-line{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:300;
+  font-size:0.68em;
+  letter-spacing:0.05em;
+  color:var(--gold-light);
+  display:block;
+}
+.hero-desc{
+  font-size:0.88rem;
+  color:rgba(255,255,255,0.45);
+  max-width:380px;
+  line-height:1.8;
+  margin-bottom:2.5rem;
+  opacity:0;
+  animation:fade-up 0.9s ease forwards 0.7s;
+  border-left:1px solid var(--border-gold);
+  padding-left:1.2rem;
+}
+.hero-actions{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  opacity:0;
+  animation:fade-up 0.9s ease forwards 0.9s;
+}
+
+/* PARTICLE GLOW BUTTON */
+.btn-glow-wrap{
+  position:relative;
+  display:inline-block;
+}
+.btn-glow-wrap canvas{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+}
+.btn-glow-ring{
+  position:absolute;
+  inset:-3px;
+  border:1px solid rgba(201,168,76,0.6);
+  pointer-events:none;
+  animation:glow-pulse 2.5s ease-in-out infinite;
+}
+.btn-glow-ring-2{
+  position:absolute;
+  inset:-8px;
+  border:1px solid rgba(201,168,76,0.2);
+  pointer-events:none;
+  animation:glow-pulse 2.5s ease-in-out infinite 0.6s;
+}
+@keyframes glow-pulse{
+  0%,100%{opacity:0.4;box-shadow:0 0 0px rgba(201,168,76,0)}
+  50%{opacity:1;box-shadow:0 0 20px rgba(201,168,76,0.3),0 0 40px rgba(201,168,76,0.1)}
+}
+.btn-schedule{
+  position:relative;z-index:1;
+  display:inline-flex;align-items:center;gap:0.7rem;
+  background:var(--gold);
+  color:var(--ink);
+  padding:1rem 2.2rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.78rem;
+  font-weight:500;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:none;
+  transition:background 0.3s,transform 0.2s;
+  white-space:nowrap;
+}
+.btn-schedule:hover{background:var(--gold-light);transform:translateY(-2px)}
+.btn-schedule svg{width:14px;height:14px}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:0.7rem;
+  background:transparent;
+  color:var(--white);
+  border:1px solid var(--border);
+  padding:1rem 2rem;
+  font-size:0.78rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:none;
+  transition:border-color 0.3s,color 0.3s,transform 0.2s;
+  white-space:nowrap;
+}
+.btn-outline:hover{border-color:rgba(255,255,255,0.5);color:var(--white);transform:translateY(-2px)}
+
+/* Floating badge */
+.hero-badge{
+  position:absolute;right:3rem;bottom:4rem;
+  z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  opacity:0;animation:fade-up 1s ease forwards 1.2s;
+}
+.badge-circle{
+  width:110px;height:110px;
+  border:1px solid var(--border-gold);
+  border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;
+  background:rgba(8,8,8,0.8);
+  backdrop-filter:blur(12px);
+  animation:badge-spin 20s linear infinite;
+  position:relative;
+}
+.badge-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.2rem;
+  line-height:1;
+  color:var(--gold);
+}
+.badge-label{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5)}
+.badge-outer{
+  position:absolute;inset:-12px;
+  border-radius:50%;
+  border:1px dashed rgba(201,168,76,0.2);
+  animation:badge-spin-rev 30s linear infinite;
+}
+@keyframes badge-spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes badge-spin-rev{0%{transform:rotate(0)}100%{transform:rotate(-360deg)}}
+
+@keyframes fade-up{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Scroll indicator */
+.scroll-ind{
+  position:absolute;bottom:2rem;left:3rem;
+  display:flex;align-items:center;gap:1rem;
+  font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+  opacity:0;animation:fade-up 1s ease forwards 1.5s;
+}
+.scroll-line{width:40px;height:1px;background:rgba(255,255,255,0.2);position:relative;overflow:hidden}
+.scroll-line::after{
+  content:'';position:absolute;top:0;left:-100%;height:1px;width:100%;
+  background:var(--gold);
+  animation:scroll-march 2s ease-in-out infinite;
+}
+@keyframes scroll-march{0%{left:-100%}100%{left:100%}}
+
+/* ===================== STATS BAR ===================== */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:rgba(201,168,76,0.02);
+}
+.stat-item{
+  padding:2.2rem 1.5rem;
+  text-align:center;
+  border-right:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+  transition:background 0.3s;
+}
+.stat-item:hover{background:var(--gold-dim)}
+.stat-item:last-child{border-right:none}
+.stat-item::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right, transparent, var(--gold), transparent);
+  transform:scaleX(0);transition:transform 0.4s;
+}
+.stat-item:hover::before{transform:scaleX(1)}
+.stat-n{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:3rem;letter-spacing:0.05em;
+  background:linear-gradient(135deg,var(--white),var(--gold-light));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:block;line-height:1;
+}
+.stat-l{
+  font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);margin-top:0.3rem;display:block;
+}
+
+/* ===================== SECTIONS ===================== */
+.section{padding:7rem 3rem}
+.tag{
+  font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:0.8rem;
+  margin-bottom:1.2rem;
+}
+.tag::after{content:'';flex:0 0 2rem;height:1px;background:var(--gold)}
+h2.title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,5vw,5rem);
+  line-height:0.95;
+  letter-spacing:0.02em;
+  margin-bottom:1rem;
+}
+h2.title em{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:300;
+  color:var(--gold-light);
+}
+.divider-gold{width:3rem;height:1px;background:var(--border-gold);margin-bottom:2.5rem}
+
+/* ===================== ABOUT ===================== */
+.about-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:600px}
+.about-visual{
+  position:relative;overflow:hidden;
+}
+.about-img-main{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=900&q=90') center/cover;
+  transition:transform 0.6s ease;
+}
+.about-visual:hover .about-img-main{transform:scale(1.03)}
+.about-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right, rgba(8,8,8,0) 60%, rgba(8,8,8,1) 100%),
+             linear-gradient(to top, rgba(8,8,8,0.8) 0%, transparent 50%);
+}
+.about-tag-float{
+  position:absolute;bottom:2rem;left:2rem;
+  border:1px solid var(--border-gold);
+  padding:1rem 1.5rem;
+  background:rgba(8,8,8,0.85);
+  backdrop-filter:blur(12px);
+}
+.about-tag-float p{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.15em;color:var(--gold)}
+.about-tag-float small{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+.about-text-side{
+  padding:5rem;
+  display:flex;flex-direction:column;justify-content:center;
+  background:var(--ink);
+  border-left:1px solid var(--border);
+}
+.about-text-side p{
+  color:rgba(255,255,255,0.45);
+  line-height:1.9;font-size:0.9rem;
+  margin-bottom:1.2rem;
+}
+.about-text-side p strong{color:rgba(255,255,255,0.8);font-weight:500}
+.about-signature{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:1.8rem;
+  color:var(--gold-light);
+  margin-top:2rem;
+}
+
+/* ===================== SERVICES ===================== */
+.services-section{background:#070707}
+.services-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem}
+.services-link{
+  font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;
+  display:flex;align-items:center;gap:0.5rem;
+  border-bottom:1px solid var(--border-gold);
+  padding-bottom:2px;
+  transition:gap 0.2s;
+}
+.services-link:hover{gap:0.9rem}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.svc-card{
+  background:#070707;
+  padding:2.5rem 2rem;
+  position:relative;overflow:hidden;
+  transition:background 0.3s;
+  cursor:none;
+}
+.svc-card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-dim) 0%, transparent 60%);
+  opacity:0;transition:opacity 0.4s;
+}
+.svc-card:hover{background:#0d0d0d}
+.svc-card:hover::before{opacity:1}
+.svc-num{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:3rem;
+  color:rgba(201,168,76,0.15);
+  line-height:1;
+  margin-bottom:1.5rem;
+  display:block;
+}
+.svc-icon{
+  width:40px;height:40px;
+  border:1px solid var(--border-gold);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.2rem;
+  font-size:1rem;
+  position:relative;
+}
+.svc-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem;letter-spacing:0.08em;
+  margin-bottom:0.6rem;
+}
+.svc-desc{
+  font-size:0.8rem;color:rgba(255,255,255,0.4);
+  line-height:1.7;margin-bottom:1.5rem;
+}
+.svc-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.6rem;font-weight:600;
+  color:var(--gold-light);
+}
+.svc-price small{font-family:'DM Sans',sans-serif;font-size:0.7rem;color:rgba(255,255,255,0.3);font-weight:400}
+.svc-line{
+  position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,var(--gold),transparent);
+  transform:scaleX(0);transition:transform 0.4s;
+}
+.svc-card:hover .svc-line{transform:scaleX(1)}
+
+/* ===================== CUTS GALLERY ===================== */
+.gallery-section{padding:0}
+.gallery-header{padding:5rem 3rem 3rem}
+.cuts-mosaic{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  grid-template-rows:320px 320px;
+  gap:2px;
+}
+.cut-cell{overflow:hidden;position:relative;cursor:none}
+.cut-cell:first-child{grid-row:span 2}
+.cut-img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94),filter 0.4s;
+  filter:grayscale(0.2) contrast(1.05);
+}
+.cut-cell:hover .cut-img{transform:scale(1.06);filter:grayscale(0) contrast(1.1)}
+.cut-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 50%);
+  opacity:0;transition:opacity 0.4s;
+  display:flex;align-items:flex-end;padding:1.5rem;
+}
+.cut-cell:hover .cut-overlay{opacity:1}
+.cut-label{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;letter-spacing:0.12em;
+  color:var(--gold-light);
+}
+
+/* ===================== REVIEWS ===================== */
+.reviews-section{background:#050505}
+.reviews-top{
+  display:flex;align-items:center;gap:4rem;
+  margin-bottom:4rem;
+  padding-bottom:3rem;
+  border-bottom:1px solid var(--border);
+}
+.rating-giant{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:7rem;line-height:1;
+  background:linear-gradient(135deg,var(--white),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  flex-shrink:0;
+}
+.rating-meta p{font-size:0.78rem;color:rgba(255,255,255,0.4);margin-top:0.4rem;letter-spacing:0.05em}
+.stars-row{display:flex;gap:4px;font-size:1.3rem;color:var(--gold);margin-bottom:0.3rem}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.rev-card{
+  border:1px solid var(--border);
+  padding:2rem;
+  position:relative;
+  transition:border-color 0.3s,background 0.3s;
+  background:transparent;
+}
+.rev-card:hover{border-color:var(--border-gold);background:rgba(201,168,76,0.03)}
+.rev-quote{
+  position:absolute;top:-1.2rem;left:1.5rem;
+  font-family:'Cormorant Garamond',serif;
+  font-size:4rem;font-weight:700;
+  color:var(--gold);
+  line-height:1;
+}
+.rev-stars{display:flex;gap:3px;color:var(--gold);font-size:0.8rem;margin-bottom:1rem}
+.rev-text{
+  font-size:0.85rem;
+  color:rgba(255,255,255,0.45);
+  line-height:1.8;
+  font-style:italic;
+  margin-bottom:1.5rem;
+}
+.rev-author-row{display:flex;align-items:center;gap:0.8rem}
+.rev-avatar{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-dim),rgba(201,168,76,0.3));
+  border:1px solid var(--border-gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.9rem;
+  color:var(--gold);
+  flex-shrink:0;
+}
+.rev-name{font-size:0.82rem;font-weight:500;letter-spacing:0.05em}
+.rev-date{font-size:0.68rem;color:rgba(255,255,255,0.3);margin-top:1px}
+
+/* ===================== CTA SECTION ===================== */
+.cta-section{
+  position:relative;
+  overflow:hidden;
+  padding:8rem 3rem;
+  text-align:center;
+  background:url('https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1600&q=90') center/cover no-repeat;
+}
+.cta-section::before{
+  content:'';position:absolute;inset:0;
+  background:rgba(8,8,8,0.88);
+}
+.cta-section::after{
+  content:'';position:absolute;
+  width:800px;height:800px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.cta-inner{position:relative;z-index:2}
+.cta-inner .tag{justify-content:center}
+.cta-inner .tag::after{display:none}
+.cta-inner .tag::before{content:'';flex:0 0 2rem;height:1px;background:var(--gold)}
+.cta-inner h2{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,6vw,6rem);
+  line-height:0.95;margin-bottom:1.5rem;
+}
+.cta-inner h2 em{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:300;
+  color:var(--gold-light);
+}
+.cta-inner p{
+  color:rgba(255,255,255,0.45);
+  max-width:480px;margin:0 auto 3rem;
+  font-size:0.9rem;line-height:1.8;
+}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* ===================== CONTACT ===================== */
+.contact-section{background:var(--ink)}
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border)}
+.contact-left{padding:4rem;border-right:1px solid var(--border)}
+.contact-item{
+  display:flex;gap:1.2rem;align-items:flex-start;
+  padding:1.5rem 0;
+  border-bottom:1px solid var(--border);
+  transition:background 0.2s;
+}
+.contact-item:last-of-type{border-bottom:none}
+.c-icon-box{
+  width:42px;height:42px;flex-shrink:0;
+  border:1px solid var(--border-gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+  margin-top:2px;
+  transition:background 0.3s;
+}
+.contact-item:hover .c-icon-box{background:var(--gold-dim)}
+.c-label{
+  font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);margin-bottom:0.3rem;display:block;
+}
+.c-val{font-size:0.9rem;line-height:1.5}
+.c-val a{color:var(--white);text-decoration:none;transition:color 0.2s}
+.c-val a:hover{color:var(--gold)}
+.contact-action-btns{margin-top:2.5rem;display:flex;flex-direction:column;gap:0.8rem}
+.map-side{min-height:450px;position:relative;overflow:hidden}
+.map-side iframe{width:100%;height:100%;min-height:450px;border:none;filter:grayscale(1) contrast(1.15) brightness(0.7)}
+.map-side::before{
+  content:'';position:absolute;inset:0;
+  border:1px solid var(--border);pointer-events:none;z-index:1;
+}
+
+/* ===================== FOOTER ===================== */
+footer{
+  border-top:1px solid var(--border);
+  padding:3rem;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:2rem;
+}
+.footer-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.3rem;letter-spacing:0.3em;
+  color:var(--white);
+}
+.footer-logo span{color:var(--gold)}
+.footer-center{text-align:center;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2)}
+.footer-right{text-align:right}
+.footer-links{display:flex;gap:1.5rem;justify-content:flex-end;list-style:none}
+.footer-links a{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--gold)}
+
+/* ===================== HORIZONTAL MARQUEE ===================== */
+.marquee-strip{
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--gold-dim);
+  overflow:hidden;padding:1rem 0;white-space:nowrap;
+}
+.marquee-inner{
+  display:inline-flex;gap:3rem;
+  animation:marquee 20s linear infinite;
+}
+.marquee-inner span{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;letter-spacing:0.2em;
+  color:rgba(201,168,76,0.5);
+  display:inline-flex;align-items:center;gap:1.5rem;
+}
+.marquee-inner span::after{content:'✦';color:var(--gold);font-size:0.6rem}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Reveal animations */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.8s ease,transform 0.8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+.reveal-delay-4{transition-delay:0.4s}
+.reveal-delay-5{transition-delay:0.5s}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .hero-content{padding:0 1.5rem}
+  .hero h1{font-size:4.5rem}
+  .hero-badge{display:none}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(2){border-right:none}
+  .stat-item:nth-child(3){border-right:1px solid var(--border);border-top:1px solid var(--border)}
+  .stat-item:last-child{border-top:1px solid var(--border)}
+  .section{padding:4rem 1.5rem}
+  .about-layout{grid-template-columns:1fr}
+  .about-visual{min-height:350px}
+  .about-text-side{padding:3rem 1.5rem}
+  .services-grid{grid-template-columns:1fr 1fr}
+  .cuts-mosaic{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .cuts-mosaic .cut-cell:first-child{grid-row:span 1}
+  .reviews-grid{grid-template-columns:1fr}
+  .reviews-top{flex-direction:column;align-items:flex-start;gap:1.5rem}
+  .contact-layout{grid-template-columns:1fr}
+  .contact-left{border-right:none;border-bottom:1px solid var(--border);padding:2rem 1.5rem}
+  footer{grid-template-columns:1fr;text-align:center}
+  .footer-right{text-align:center}
+  .footer-links{justify-content:center}
+}
+@media(max-width:600px){
+  .services-grid{grid-template-columns:1fr}
+  .cuts-mosaic{grid-template-columns:1fr}
+  .cuts-mosaic .cut-cell{height:260px}
+}
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ===== NAV ===== -->
+<nav id="nav">
+  <a href="#" class="nav-logo">EL <span>MACHO</span></a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#cortes">Cortes</a></li>
+    <li><a href="#avaliacoes">Avaliações</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="http://elmachobarbearia.ageenda.com.br/" target="_blank" class="nav-book">Agendar →</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg-img"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Belém, PA &nbsp;·&nbsp; Est. 2018 &nbsp;·&nbsp; ★ 4.7</div>
+    <h1>
+      <span class="italic-line">the art of</span>
+      EL<br>MACHO
+    </h1>
+    <p class="hero-desc">Precisão de lâmina, identidade de marca. A barbearia que transformou o Marco em referência de estilo masculino.</p>
+    <div class="hero-actions">
+      <div class="btn-glow-wrap">
+        <div class="btn-glow-ring"></div>
+        <div class="btn-glow-ring-2"></div>
+        <canvas id="particleCanvas" width="220" height="54" style="position:absolute;inset:0;pointer-events:none;z-index:0"></canvas>
+        <a href="http://elmachobarbearia.ageenda.com.br/" target="_blank" class="btn-schedule">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="12" height="11" rx="1"/><path d="M1 5h12M4 1v2M10 1v2"/></svg>
+          Agende Agora
+        </a>
+      </div>
+      <a href="tel:+559133472405" class="btn-outline">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2.5C2 2.5 3 5 5 7s4.5 3 4.5 3l1.5-1.5s.5-.5 0-1C10 7 8.5 6 8.5 6s-.5-.3-1 0L7 6.5C7 6.5 5.5 5.5 4 4l.5-.5c.3-.5 0-1 0-1S3 1 2.5 1C2 1 2 2.5 2 2.5z"/></svg>
+        (91) 3347-2405
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-badge">
+    <div class="badge-circle">
+      <div class="badge-outer"></div>
+      <span class="badge-num">4.7</span>
+      <span class="badge-label">Google</span>
+      <span class="badge-label">Rating</span>
+    </div>
+  </div>
+
+  <div class="scroll-ind">
+    <div class="scroll-line"></div>
+    Scroll para explorar
+  </div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-inner">
+    <span>Corte Social</span>
+    <span>Barba Completa</span>
+    <span>Pigmentação</span>
+    <span>Hidratação Capilar</span>
+    <span>Nevou Selagem</span>
+    <span>Corte + Barba</span>
+    <span>El Macho Barbearia</span>
+    <span>Belém PA</span>
+    <span>Corte Social</span>
+    <span>Barba Completa</span>
+    <span>Pigmentação</span>
+    <span>Hidratação Capilar</span>
+    <span>Nevou Selagem</span>
+    <span>Corte + Barba</span>
+    <span>El Macho Barbearia</span>
+    <span>Belém PA</span>
+  </div>
+</div>
+
+<!-- ===== STATS ===== -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <span class="stat-n">220<sup style="font-size:1.5rem">+</sup></span>
+    <span class="stat-l">Avaliações Google</span>
+  </div>
+  <div class="stat-item reveal reveal-delay-1">
+    <span class="stat-n">4.7</span>
+    <span class="stat-l">Nota Média</span>
+  </div>
+  <div class="stat-item reveal reveal-delay-2">
+    <span class="stat-n">6<sup style="font-size:1.5rem">+</sup></span>
+    <span class="stat-l">Anos de Tradição</span>
+  </div>
+  <div class="stat-item reveal reveal-delay-3">
+    <span class="stat-n">72</span>
+    <span class="stat-l">Fotos no Google</span>
+  </div>
+</div>
+
+<!-- ===== SOBRE ===== -->
+<div id="sobre" class="about-layout">
+  <div class="about-visual reveal">
+    <div class="about-img-main"></div>
+    <div class="about-img-overlay"></div>
+    <div class="about-tag-float">
+      <small>Localização</small>
+      <p>Marco, Belém — PA</p>
+    </div>
+  </div>
+  <div class="about-text-side">
+    <div class="tag reveal">Sobre nós</div>
+    <h2 class="title reveal reveal-delay-1">Mais que um corte —<br><em>uma identidade</em></h2>
+    <div class="divider-gold reveal reveal-delay-2"></div>
+    <p class="reveal reveal-delay-2">A <strong>El Macho Barbearia</strong> nasceu da paixão por barbearia clássica com identidade própria. Situada no coração do Marco, em Belém do Pará, somos referência em cortes masculinos de precisão, modelagem de barba e atmosfera premium.</p>
+    <p class="reveal reveal-delay-3">Nossa equipe é formada por <strong>profissionais especializados</strong>, comprometidos com excelência em cada detalhe — do corte ao acabamento, da recepção ao ambiente.</p>
+    <p class="reveal reveal-delay-3">Agendamento online disponível para sua comodidade, sem esperas desnecessárias.</p>
+    <div class="about-signature reveal reveal-delay-4">El Macho</div>
+  </div>
+</div>
+
+<!-- ===== SERVIÇOS ===== -->
+<section id="servicos" class="section services-section">
+  <div class="services-header">
+    <div>
+      <div class="tag reveal">O que oferecemos</div>
+      <h2 class="title reveal reveal-delay-1">Nossos <em>Serviços</em></h2>
+    </div>
+    <a href="http://elmachobarbearia.ageenda.com.br/" target="_blank" class="services-link reveal">
+      Ver todos os serviços →
+    </a>
+  </div>
+  <div class="services-grid reveal">
+    <div class="svc-card">
+      <span class="svc-num">01</span>
+      <div class="svc-icon">✂</div>
+      <div class="svc-name">Corte Social</div>
+      <div class="svc-desc">Corte clássico e refinado, ideal para o dia a dia profissional com acabamento impecável.</div>
+      <div class="svc-price">R$ 35 <small>/ sessão</small></div>
+      <div class="svc-line"></div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-num">02</span>
+      <div class="svc-icon">⚡</div>
+      <div class="svc-name">Corte + Barba</div>
+      <div class="svc-desc">Combo completo com modelagem de barba premium e acabamento com navalha.</div>
+      <div class="svc-price">R$ 55 <small>/ sessão</small></div>
+      <div class="svc-line"></div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-num">03</span>
+      <div class="svc-icon">◈</div>
+      <div class="svc-name">Barba Completa</div>
+      <div class="svc-desc">Modelagem, aparagem e hidratação com produtos de linha exclusiva.</div>
+      <div class="svc-price">R$ 30 <small>/ sessão</small></div>
+      <div class="svc-line"></div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-num">04</span>
+      <div class="svc-icon">◉</div>
+      <div class="svc-name">Pigmentação</div>
+      <div class="svc-desc">Cobertura e uniformização com resultado natural e duradouro.</div>
+      <div class="svc-price">R$ 60 <small>/ sessão</small></div>
+      <div class="svc-line"></div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-num">05</span>
+      <div class="svc-icon">✦</div>
+      <div class="svc-name">Hidratação Capilar</div>
+      <div class="svc-desc">Tratamento profundo para fios secos ou danificados, com brilho e leveza.</div>
+      <div class="svc-price">R$ 45 <small>/ sessão</small></div>
+      <div class="svc-line"></div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-num">06</span>
+      <div class="svc-icon">▲</div>
+      <div class="svc-name">Nevou (Selagem)</div>
+      <div class="svc-desc">Selagem capilar para alinhamento, brilho intenso e durabilidade.</div>
+      <div class="svc-price">R$ 80 <small>/ sessão</small></div>
+      <div class="svc-line"></div>
+    </div>
+  </div>
+  <p style="font-size:0.7rem;color:rgba(255,255,255,0.2);margin-top:1.5rem;letter-spacing:0.1em">* Preços aproximados. Consulte os valores atuais no agendamento online.</p>
+</section>
+
+<!-- ===== CUTS GALLERY ===== -->
+<section id="cortes" class="gallery-section">
+  <div class="gallery-header">
+    <div class="tag reveal">Nosso trabalho</div>
+    <h2 class="title reveal reveal-delay-1">Cortes que <em>definem</em></h2>
+  </div>
+  <div class="cuts-mosaic">
+    <div class="cut-cell">
+      <img class="cut-img" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=900&q=90" alt="Corte degradê">
+      <div class="cut-overlay"><span class="cut-label">Degradê Moderno</span></div>
+    </div>
+    <div class="cut-cell">
+      <img class="cut-img" src="https://images.unsplash.com/photo-1622287162716-f311baa1a2b8?w=700&q=90" alt="Barba modelada">
+      <div class="cut-overlay"><span class="cut-label">Barba Sculpt</span></div>
+    </div>
+    <div class="cut-cell">
+      <img class="cut-img" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=700&q=90" alt="Ambiente barbearia">
+      <div class="cut-overlay"><span class="cut-label">Ambiente Premium</span></div>
+    </div>
+    <div class="cut-cell">
+      <img class="cut-img" src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=700&q=90" alt="Corte social">
+      <div class="cut-overlay"><span class="cut-label">Social Clássico</span></div>
+    </div>
+    <div class="cut-cell">
+      <img class="cut-img" src="https://images.unsplash.com/photo-1599351431613-18ef1fdd27e1?w=700&q=90" alt="Detalhe corte">
+      <div class="cut-overlay"><span class="cut-label">Detalhe & Precisão</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section id="avaliacoes" class="section reviews-section">
+  <div class="tag reveal">O que dizem sobre nós</div>
+  <h2 class="title reveal reveal-delay-1">Avaliações <em>reais</em></h2>
+  <div class="divider-gold reveal reveal-delay-2"></div>
+  <div class="reviews-top reveal reveal-delay-2">
+    <div class="rating-giant">4.7</div>
+    <div class="rating-meta">
+      <div class="stars-row">★★★★★</div>
+      <p>220+ avaliações verificadas no Google Maps</p>
+      <p style="margin-top:0.8rem;font-size:0.72rem">Barbearia mais bem avaliada do Marco, Belém — PA</p>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="rev-card reveal">
+      <div class="rev-quote">"</div>
+      <div class="rev-stars">★★★★★</div>
+      <p class="rev-text">Melhor barbearia de Belém, sem dúvida. Atendimento impecável, ambiente top e o corte ficou perfeito. Já indiquei pra todos os amigos!</p>
+      <div class="rev-author-row">
+        <div class="rev-avatar">LM</div>
+        <div><div class="rev-name">Lucas M.</div><div class="rev-date">Google · há 2 semanas</div></div>
+      </div>
+    </div>
+    <div class="rev-card reveal reveal-delay-1">
+      <div class="rev-quote">"</div>
+      <div class="rev-stars">★★★★★</div>
+      <p class="rev-text">Fui pela primeira vez e me apaixonei. O barbeiro entendeu exatamente o que eu queria, barba impecável. Virei cliente fixo!</p>
+      <div class="rev-author-row">
+        <div class="rev-avatar">RA</div>
+        <div><div class="rev-name">Rodrigo A.</div><div class="rev-date">Google · há 1 mês</div></div>
+      </div>
+    </div>
+    <div class="rev-card reveal reveal-delay-2">
+      <div class="rev-quote">"</div>
+      <div class="rev-stars">★★★★★</div>
+      <p class="rev-text">Ambiente incrível, equipe muito profissional e o resultado sempre supera minhas expectativas. Super recomendo a El Macho!</p>
+      <div class="rev-author-row">
+        <div class="rev-avatar">TF</div>
+        <div><div class="rev-name">Thiago F.</div><div class="rev-date">Google · há 3 semanas</div></div>
+      </div>
+    </div>
+    <div class="rev-card reveal reveal-delay-1">
+      <div class="rev-quote">"</div>
+      <div class="rev-stars">★★★★☆</div>
+      <p class="rev-text">Excelente atendimento e corte muito bem feito. Lugar bem decorado, dá vontade de ficar. Voltarei com certeza!</p>
+      <div class="rev-author-row">
+        <div class="rev-avatar">CE</div>
+        <div><div class="rev-name">Carlos E.</div><div class="rev-date">Google · há 2 meses</div></div>
+      </div>
+    </div>
+    <div class="rev-card reveal reveal-delay-2">
+      <div class="rev-quote">"</div>
+      <div class="rev-stars">★★★★★</div>
+      <p class="rev-text">Agendamento online super fácil, sem espera. O barbeiro foi muito atencioso e o resultado ficou 10/10!</p>
+      <div class="rev-author-row">
+        <div class="rev-avatar">PV</div>
+        <div><div class="rev-name">Pedro V.</div><div class="rev-date">Google · há 1 semana</div></div>
+      </div>
+    </div>
+    <div class="rev-card reveal reveal-delay-3">
+      <div class="rev-quote">"</div>
+      <div class="rev-stars">★★★★★</div>
+      <p class="rev-text">Combo corte + barba perfeito. Preço justo, ambiente climatizado e boa música. Me senti em casa. Nota 10!</p>
+      <div class="rev-author-row">
+        <div class="rev-avatar">MB</div>
+        <div><div class="rev-name">Mateus B.</div><div class="rev-date">Google · há 3 semanas</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="tag reveal">Reserve seu horário</div>
+    <h2 class="reveal reveal-delay-1">Pronto para um<br><em>novo visual?</em></h2>
+    <p class="reveal reveal-delay-2">Agende agora de forma rápida, sem esperas. Escolha o horário que preferir e deixa o resto com a gente.</p>
+    <div class="cta-btns reveal reveal-delay-3">
+      <div class="btn-glow-wrap" style="display:inline-block">
+        <div class="btn-glow-ring"></div>
+        <div class="btn-glow-ring-2"></div>
+        <a href="http://elmachobarbearia.ageenda.com.br/" target="_blank" class="btn-schedule">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="12" height="11" rx="1"/><path d="M1 5h12M4 1v2M10 1v2"/></svg>
+          Agendar Online
+        </a>
+      </div>
+      <a href="https://maps.google.com/?q=Tv.+da+Estrella+2082+Marco+Belém+PA" target="_blank" class="btn-outline">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="6" r="2"/><path d="M7 13C7 13 2 9 2 6a5 5 0 0110 0c0 3-5 7-5 7z"/></svg>
+        Como Chegar
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTATO ===== -->
+<section id="contato" class="section contact-section" style="padding-top:5rem;padding-bottom:0">
+  <div class="tag reveal">Encontre-nos</div>
+  <h2 class="title reveal reveal-delay-1" style="margin-bottom:3rem">Contato & <em>Localização</em></h2>
+  <div class="contact-layout reveal reveal-delay-2">
+    <div class="contact-left">
+      <div class="contact-item">
+        <div class="c-icon-box">📍</div>
+        <div>
+          <span class="c-label">Endereço</span>
+          <div class="c-val">Tv. da Estrella, 2082 — Marco<br>Belém, PA · 66080-009</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="c-icon-box">⏰</div>
+        <div>
+          <span class="c-label">Horário de Funcionamento</span>
+          <div class="c-val">
+            Segunda a Sábado: 9h às 18h30<br>
+            <span style="color:#4caf50;font-size:0.8rem;margin-top:0.3rem;display:block">● Aberto hoje</span>
+          </div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="c-icon-box">📞</div>
+        <div>
+          <span class="c-label">Telefone</span>
+          <div class="c-val"><a href="tel:+559133472405">(91) 3347-2405</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="c-icon-box">🌐</div>
+        <div>
+          <span class="c-label">Agendamento Online</span>
+          <div class="c-val"><a href="http://elmachobarbearia.ageenda.com.br/" target="_blank">elmachobarbearia.ageenda.com.br</a></div>
+        </div>
+      </div>
+      <div class="contact-action-btns">
+        <a href="http://elmachobarbearia.ageenda.com.br/" target="_blank" class="btn-schedule" style="justify-content:center">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><rect x="1" y="2" width="12" height="11" rx="1"/><path d="M1 5h12M4 1v2M10 1v2"/></svg>
+          Agendar Agora
+        </a>
+        <a href="https://maps.google.com/?q=Tv.+da+Estrella+2082+Marco+Belém+PA" target="_blank" class="btn-outline" style="justify-content:center">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="6" r="2"/><path d="M7 13C7 13 2 9 2 6a5 5 0 0110 0c0 3-5 7-5 7z"/></svg>
+          Ver no Google Maps
+        </a>
+      </div>
+    </div>
+    <div class="map-side">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d994.0!2d-48.4856!3d-1.4553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x92a48e58c8af2a53%3A0x3ea28a98b99fdaba!2sEl%20Macho%20Barbearia!5e0!3m2!1spt-BR!2sbr!4v1234567890!5m2!1spt-BR!2sbr"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        title="El Macho Barbearia no Google Maps">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <a href="#" class="footer-logo">EL <span>MACHO</span></a>
+  <div class="footer-center">
+    © 2024 El Macho Barbearia<br>
+    Todos os direitos reservados
+  </div>
+  <div class="footer-right">
+    <ul class="footer-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#contato">Contato</a></li>
+      <li><a href="http://elmachobarbearia.ageenda.com.br/" target="_blank">Agendar</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+// Custom cursor
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+function animRing(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing)}
+animRing();
+
+// Nav scroll
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>60)});
+
+// Intersection Observer for reveals
+const revealEls=document.querySelectorAll('.reveal');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}});
+},{threshold:0.1,rootMargin:'0px 0px -60px 0px'});
+revealEls.forEach(el=>io.observe(el));
+
+// Particle animation on hero button
+(function(){
+  const canvas=document.getElementById('particleCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const particles=[];
+  for(let i=0;i<40;i++){
+    particles.push({
+      x:Math.random()*W,y:Math.random()*H,
+      r:Math.random()*1.2+0.3,
+      vx:(Math.random()-0.5)*0.5,
+      vy:-Math.random()*0.8-0.1,
+      age:Math.random()*100,
+      max:80+Math.random()*60
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach((p,i)=>{
+      p.x+=p.vx;p.y+=p.vy;p.age++;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+      if(p.y<0||p.age>p.max){p.y=H;p.age=0;p.x=Math.random()*W}
+      const a=Math.sin((p.age/p.max)*Math.PI)*0.7;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(201,168,76,${a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
+HTMLEOF
+echo "Done"
